@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-import type { CSSProperties } from 'vue'
 import { computed, ref, watch } from 'vue'
 import { NButton, NLayoutSider } from 'naive-ui'
 import { useAppStore } from '@/store'
@@ -29,6 +28,7 @@ function handleUpdateCollapsed() {
           <NButton  block color="#8a2be2">
             创 建 对 话
           </NButton>
+          
         </div>
         <div class="flex-1 min-h-0 pb-4 overflow-hidden">
           <List />
