@@ -22,7 +22,6 @@ const ms = useMessage()
 
 
 const { isMobile } = useIsMobile() // 判断是否移动端
-
 const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => [])
@@ -43,15 +42,104 @@ dataSources.value.forEach((item, index) => {
 })
 
 function handleSubmit() {
-  // handleSubmit
+  // ooo
+  onConversation()
+}
+
+async function onConversation() {
+  // www
+  let message = prompt.value
+
+  if (loading.value)
+    return
+
+  if (!message || message.trim() === '')
+    return
+
+  function addChat() {}
+
+  function fetchChatAPIProcess() {}
+
+  addChat(
+    +uuid,
+    {
+      dateTime: new Date().toLocaleString(),
+      text: message,
+      inversion: true,
+      error: false,
+      conversationOptions: null,
+      requestOptions: { prompt: message, options: null },
+    },
+  )
+
+  loading.value = true
+  prompt.value = ''
+
+  let options: Chat.ConversationRequest = {}
+  const lastContext = conversationList.value[conversationList.value.length - 1]?.conversationOptions
+
+  if (lastContext && usingContext.value)
+    options = { ...lastContext }
+
+  addChat(
+    +uuid,
+    {
+      dateTime: new Date().toLocaleString(),
+      text: t('chat.thinking'),
+      loading: true,
+    },
+  )
+
+  let lastText = ''
+  const fetchChatAPIOnce = async () => {
+    await fetchChatAPIProcess<Chat.ConversationResponse>({
+      prompt: message,
+      options,
+      signal: controller.signal,
+      onDownloadProgress: ({ event }) => {
+        const xhr = event.target
+        const { responseText } = xhr
+        // Always process the final line
+        const lastIndex = responseText.lastIndexOf('\n', responseText.length - 2)
+        let chunk = responseText
+        if (lastIndex !== -1)
+          chunk = responseText.substring(lastIndex)
+        try {
+          const data = JSON.parse(chunk)
+          updateChat(
+            +uuid,
+            dataSources.value.length - 1,
+            {
+              dateTime: new Date().toLocaleString(),
+              text: lastText + (data.text ?? ''),
+              inversion: false,
+              error: false,
+            },
+          )
+
+          if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
+            options.parentMessageId = data.id
+            lastText = data.text
+            message = ''
+            return fetchChatAPIOnce()
+          }
+
+          scrollToBottomIfAtBottom()
+        }
+        catch (error) {
+          //
+        }
+      },
+    })
+    updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })
+  }
+  await fetchChatAPIOnce()
 }
 
 
 
-
-
 function handleExport() {
-  
+
 }
 
 function handleDelete(index: number) {
@@ -70,11 +158,11 @@ function handleDelete(index: number) {
 }
 
 function handleClear() {
-  
+
 }
 
 function handleEnter(event: KeyboardEvent) {
- // 按 Enter 提交
+  // 按 Enter 提交
 }
 
 function handleStop() {
@@ -125,7 +213,7 @@ const footerClass = computed(() => {
   // p-2  padding  0.5rem
   let classes = ['p-4']
   if (isMobile.value)
-  //  pr-3  padding-right 0.75rem
+    //  pr-3  padding-right 0.75rem
     classes = ['sticky', 'left-0', 'bottom-0', 'right-0', 'p-2', 'pr-3', 'overflow-hidden']
   return classes
 })
@@ -145,11 +233,8 @@ onUnmounted(() => {
   <div class="flex flex-col w-full h-full">
     <main class="flex-1 overflow-hidden">
       <div id="scrollRef" ref="scrollRef" class="h-full overflow-hidden overflow-y-auto">
-        <div
-          id="image-wrapper"
-          class="w-full max-w-screen-xl m-auto dark:bg-[#101014]"
-          :class="[isMobile ? 'p-2' : 'p-4']"
-        >
+        <div id="image-wrapper" class="w-full max-w-screen-xl m-auto dark:bg-[#101014]"
+          :class="[isMobile ? 'p-2' : 'p-4']">
           <template v-if="!dataSources.length">
             <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
               <!--  text-3xl      font-size: 1.875rem; /* 30px */line-height: 2.25rem; /* 36px */-->
@@ -186,24 +271,16 @@ onUnmounted(() => {
               <SvgIcon icon="ri:download-2-line" />
             </span>
           </HoverButton>
-          <HoverButton >
+          <HoverButton>
             <span class="text-xl" :class="{ 'text-[#4b9e5f]': true }">
               <SvgIcon icon="ri:chat-history-line" />
             </span>
           </HoverButton>
           <NAutoComplete v-model:value="prompt" :options="searchOptions" :render-label="renderOption">
             <template #default="{ handleInput, handleBlur, handleFocus }">
-              <NInput
-                ref="inputRef"
-                v-model:value="prompt"
-                type="textarea"
-                :placeholder="placeholder"
-                :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
-                @input="handleInput"
-                @focus="handleFocus"
-                @blur="handleBlur"
-                @keypress="handleEnter"
-              />
+              <NInput ref="inputRef" v-model:value="prompt" type="textarea" :placeholder="placeholder"
+                :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }" @input="handleInput" @focus="handleFocus"
+                @blur="handleBlur" @keypress="handleEnter" />
             </template>
           </NAutoComplete>
           <NButton type="primary" :disabled="buttonDisabled" @click="handleSubmit">
