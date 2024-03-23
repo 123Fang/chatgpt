@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "service": "esno ./service/index.ts",
     "dev": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
