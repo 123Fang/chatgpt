@@ -1,41 +1,35 @@
-import axios from 'axios'
+import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
+import { post } from '@/utils/request'
 
-const BASE_URL = import.meta.env.VITE_GLOB_API_URL
-
-async function fetchChatAPI(message: string) {
-  if (!message || message.trim() === '')
-    return
-
-  try {
-    const { status, data } = await axios.post(`${BASE_URL}/chat`, { message })
-
-    if (status === 200) {
-      if (data.text)
-        return Promise.resolve(data)
-
-      if (data.statusText)
-        return Promise.reject(new Error(data.statusText))
-    }
-
-    return Promise.reject(new Error('Request failed'))
-  }
-  catch (error) {
-    return Promise.reject(error)
-  }
+export function fetchChatAPI<T = any>(
+  prompt: string,
+  options?: { conversationId?: string; parentMessageId?: string },
+  signal?: GenericAbortSignal,
+) {
+  return post<T>({
+    url: '/chat',
+    data: { prompt, options },
+    signal,
+  })
 }
 
-async function clearChatContext() {
-  try {
-    const { status, data } = await axios.post(`${BASE_URL}/clear`)
-
-    if (status === 200)
-      return Promise.resolve(data)
-
-    return Promise.reject(new Error('Request failed'))
-  }
-  catch (error) {
-    return Promise.reject(error)
-  }
+export function fetchChatAPIProcess<T = any>(
+  params: {
+    prompt: string
+    options?: { conversationId?: string; parentMessageId?: string }
+    signal?: GenericAbortSignal
+    onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void },
+) {
+  return post<T>({
+    url: '/chat-process',
+    data: { prompt: params.prompt, options: params.options },
+    signal: params.signal,
+    onDownloadProgress: params.onDownloadProgress,
+  })
 }
 
-export { fetchChatAPI, clearChatContext }
+export function fetchChatConfig<T = any>() {
+  return post<T>({
+    url: '/config',
+  })
+}
