@@ -1,9 +1,9 @@
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { NButton, NInput, NPopover, useMessage } from 'naive-ui'
-import Message from './components/Message.vue'
-import { fetchChatAPI } from '@/api/index.ts'
-import { SvgIcon } from '@/components/common'
+import { Message } from './components'
+import { clearChatContext, fetchChatAPI } from './request'
+import { Icon } from '@/components'
 
 interface ListProps {
   dateTime: string
@@ -27,9 +27,16 @@ function initChat() {
   addMessage('Hi, I am ChatGPT, a chatbot based on GPT-3.', false)
 }
 
-function handleClear() {
-  list.value = []
-  setTimeout(initChat, 100)
+async function handleClear() {
+  try {
+    const { message } = await clearChatContext()
+    ms.success(message)
+    list.value = []
+    setTimeout(initChat, 100)
+  }
+  catch (error) {
+    ms.error('Clear failed, please try again later.')
+  }
 }
 
 function handleEnter(event: KeyboardEvent) {
@@ -56,16 +63,12 @@ async function handleSubmit() {
   }
   finally {
     loading.value = false
-    scrollRef.value && (scrollRef.value.scrollTop = scrollRef.value.scrollHeight)
   }
 }
 
 function addMessage(message: string, reversal = false) {
-  list.value.push({
-    dateTime: new Date().toLocaleString(),
-    message,
-    reversal,
-  })
+  list.value.push({ dateTime: new Date().toLocaleString(), message, reversal })
+  nextTick(() => scrollRef.value && (scrollRef.value.scrollTop = scrollRef.value.scrollHeight))
 }
 </script>
 
@@ -82,10 +85,10 @@ function addMessage(message: string, reversal = false) {
               class="w-[40px] h-[40px] rounded-full hover:bg-neutral-100 transition flex justify-center items-center"
               @click="handleClear"
             >
-              <SvgIcon icon="ri:delete-bin-6-line" />
+              <Icon icon="ri:delete-bin-6-line" />
             </button>
           </template>
-          <span>Clear</span>
+          <span>Clear Context</span>
         </NPopover>
       </div>
     </header>
@@ -93,10 +96,7 @@ function addMessage(message: string, reversal = false) {
       <div ref="scrollRef" class="h-full p-4 overflow-hidden overflow-y-auto">
         <div>
           <Message
-            v-for="(item, index) of list"
-            :key="index"
-            :date-time="item.dateTime"
-            :message="item.message"
+            v-for="(item, index) of list" :key="index" :date-time="item.dateTime" :message="item.message"
             :reversal="item.reversal"
           />
         </div>
@@ -104,15 +104,10 @@ function addMessage(message: string, reversal = false) {
     </main>
     <footer class="p-4">
       <div class="flex items-center justify-between space-x-2">
-        <NInput
-          v-model:value="value"
-          :disabled="loading"
-          placeholder="Type a message..."
-          @keyup="handleEnter"
-        />
+        <NInput v-model:value="value" :disabled="loading" placeholder="Type a message..." @keyup="handleEnter" />
         <NButton type="primary" :loading="loading" @click="handleSubmit">
           <template #icon>
-            <SvgIcon icon="ri:send-plane-fill" />
+            <Icon icon="ri:send-plane-fill" />
           </template>
         </NButton>
       </div>
