@@ -1,42 +1,121 @@
 <script setup lang='ts'>
-import { NButton, NInput, NScrollbar } from 'naive-ui'
+import { onMounted, ref } from 'vue'
+import { NButton, NInput, NPopover, useMessage } from 'naive-ui'
 import Message from './components/Message.vue'
-import { SvgIcon } from '@/components'
+import { fetchChatAPI } from '@/api/index.ts'
+import { SvgIcon } from '@/components/common'
+
+interface ListProps {
+  dateTime: string
+  message: string
+  reversal?: boolean
+}
+
+const scrollRef = ref<HTMLDivElement>()
+
+const ms = useMessage()
+
+const value = ref('')
+
+const loading = ref(false)
+
+const list = ref<ListProps[]>([])
+
+onMounted(initChat)
+
+function initChat() {
+  addMessage('Hi, I am ChatGPT, a chatbot based on GPT-3.', false)
+}
+
+function handleClear() {
+  list.value = []
+  setTimeout(initChat, 100)
+}
+
+function handleEnter(event: KeyboardEvent) {
+  if (event.key === 'Enter')
+    handleSubmit()
+}
+
+async function handleSubmit() {
+  if (!value.value) {
+    ms.warning('Please enter a message')
+    return
+  }
+
+  addMessage(value.value, true)
+
+  try {
+    loading.value = true
+    const { text } = await fetchChatAPI(value.value)
+    value.value = ''
+    addMessage(text, false)
+  }
+  catch (error: any) {
+    addMessage(error.message ?? 'Request failed, please try again later.', false)
+  }
+  finally {
+    loading.value = false
+    scrollRef.value && (scrollRef.value.scrollTop = scrollRef.value.scrollHeight)
+  }
+}
+
+function addMessage(message: string, reversal = false) {
+  list.value.push({
+    dateTime: new Date().toLocaleString(),
+    message,
+    reversal,
+  })
+}
 </script>
 
 <template>
-  <div class="h-full p-4">
-    <div class="flex flex-col h-full overflow-hidden border rounded-md shadow-md">
-      <header class="flex items-center justify-between p-4">
-        <div>会话</div>
-        <div>&nbsp;</div>
-      </header>
-      <main class="flex-1 overflow-hidden border-y">
-        <div class="h-full">
-          <NScrollbar class="h-full p-4">
-            <div>
-              <Message date="10 hours ago" message="hello world" />
-              <Message date="10 hours ago" message="Reprehenderit ut voluptas sapiente ratione nostrum est." user />
-              <Message date="10 hours ago" message="hello world" />
-              <Message date="10 hours ago" message="Reprehenderit ut voluptas sapiente ratione nostrum est." user />
-              <Message date="10 hours ago" message="hello world" />
-              <Message date="10 hours ago" message="Reprehenderit ut voluptas sapiente ratione nostrum est." user />
-              <Message date="10 hours ago" message="hello world" />
-              <Message date="10 hours ago" message="Reprehenderit ut voluptas sapiente ratione nostrum est." user />
-              <Message date="10 hours ago" message="hello world" />
-              <Message date="10 hours ago" message="Reprehenderit ut voluptas sapiente ratione nostrum est." user />
-            </div>
-          </NScrollbar>
+  <div class="flex flex-col h-full overflow-hidden border rounded-md shadow-md">
+    <header class="flex items-center justify-between p-4">
+      <h1 class="text-xl font-bold">
+        ChatGPT Web
+      </h1>
+      <div>
+        <NPopover>
+          <template #trigger>
+            <button
+              class="w-[40px] h-[40px] rounded-full hover:bg-neutral-100 transition flex justify-center items-center"
+              @click="handleClear"
+            >
+              <SvgIcon icon="ri:delete-bin-6-line" />
+            </button>
+          </template>
+          <span>Clear</span>
+        </NPopover>
+      </div>
+    </header>
+    <main class="flex-1 overflow-hidden border-y">
+      <div ref="scrollRef" class="h-full p-4 overflow-hidden overflow-y-auto">
+        <div>
+          <Message
+            v-for="(item, index) of list"
+            :key="index"
+            :date-time="item.dateTime"
+            :message="item.message"
+            :reversal="item.reversal"
+          />
         </div>
-      </main>
-      <footer class="p-4">
-        <div class="flex items-center justify-between space-x-2">
-          <NInput placeholder="Type a message" />
-          <NButton type="primary">
+      </div>
+    </main>
+    <footer class="p-4">
+      <div class="flex items-center justify-between space-x-2">
+        <NInput
+          v-model:value="value"
+          :disabled="loading"
+          placeholder="Type a message..."
+          @keyup="handleEnter"
+        />
+        <NButton type="primary" :loading="loading" @click="handleSubmit">
+          <template #icon>
             <SvgIcon icon="ri:send-plane-fill" />
-          </NButton>
-        </div>
-      </footer>
-    </div>
+          </template>
+        </NButton>
+      </div>
+    </footer>
   </div>
 </template>

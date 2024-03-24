@@ -1,5 +1,6 @@
 <script setup lang='ts'>
-import { SvgIcon } from '@/components'
+import { SvgIcon } from '@/components/common'
+
 interface Props {
   user?: boolean
   date?: string
