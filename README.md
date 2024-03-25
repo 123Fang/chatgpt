@@ -1,7 +1,7 @@
 # cbatgpt webApp
 
 > 基于 vue3 和  express 的 chatgpt webApp
-
+<img src='https://raw.githubusercontent.com/123Fang/chatgpt/main/%E6%88%AA%E5%B1%8F2024-03-25%2017.13.55.png' />
 
 
 ## 密钥
