@@ -3,7 +3,7 @@ import type { CSSProperties } from 'vue'
 import { computed, watch } from 'vue'
 import { NButton, NLayoutSider } from 'naive-ui'
 import List from './List.vue'
-import Footer from './Footer.vue'
+import HeadTitle from './HeadTitle.vue'
 import { useAppStore, useChatStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 
@@ -57,7 +57,7 @@ watch(
     @update-collapsed="handleUpdateCollapsed"
   >
     <div class="flex flex-col h-full">
-      <Footer />
+      <HeadTitle />
       <main class="flex flex-col flex-1 min-h-0">
         <div class="p-4">
           <NButton dashed block color="#8a2be2" @click="handleAdd">

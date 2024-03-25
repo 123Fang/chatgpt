@@ -6,7 +6,7 @@ const show = ref(false)
 </script>
 
 <template>
-  <div class="flex items-center justify-between min-w-0 p-4 overflow-hidden border-b">
+  <div class="flex items-center justify-between min-w-0 p-4 overflow-hidden">
     <UserAvatar />
   </div>
 </template>

@@ -14,18 +14,14 @@ let controller = new AbortController()
 
 const route = useRoute()
 const dialog = useDialog()
-
 const chatStore = useChatStore()
-
 const { isMobile } = useBasicLayout()
 const { addChat, updateChat } = useChat()
 const { scrollRef, scrollToBottom } = useScroll()
 
 const { uuid } = route.params as { uuid: string }
-
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
-
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
 
@@ -232,8 +228,14 @@ async function onRegenerate(index: number) {
 }
 
 function handleClear() {
-  if (loading.value)
+  if (loading.value) {
+    dialog.warning({
+      title: 'Clear Chat',
+      content: 'Please Waiting',
+      positiveText: 'Yes'
+    })
     return
+  }
 
   dialog.warning({
     title: 'Clear Chat',
@@ -317,8 +319,8 @@ onUnmounted(() => {
         <NInput
           v-model:value="prompt"
           type="textarea"
-          :autosize="{ minRows: 1, maxRows: 2 }"
-          placeholder="Ask me anything..."
+          :autosize="{ minRows: 3, maxRows: 5 }"
+          placeholder="输入您的问题..."
           @keypress="handleEnter"
         />
         <NButton type="primary" :disabled="buttonDisabled" @click="handleSubmit" >
