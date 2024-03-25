@@ -4,24 +4,19 @@ const LOCAL_NAME = 'appSetting'
 
 export type Theme = 'light' | 'dark' | 'auto'
 
-export type Language = 'en-US' | 'es-ES' | 'ko-KR' | 'ru-RU' | 'vi-VN' | 'zh-CN' | 'zh-TW'
 
-const languageMap: { [key: string]: Language } = {
-  'en': 'en-US',
-  'en-US': 'en-US',
-  'zh': 'zh-CN',
-  'zh-CN': 'zh-CN',
-}
-
+/**
+ *  侧边展开
+ *  主题
+ * 
+ * **/
 export interface AppState {
   siderCollapsed: boolean
   theme: Theme
-  language: Language
 }
 
 export function defaultSetting(): AppState {
-  const language = languageMap[navigator.language]
-  return { siderCollapsed: false, theme: 'light', language }
+  return { siderCollapsed: false, theme: 'light' }
 }
 
 export function getLocalSetting(): AppState {

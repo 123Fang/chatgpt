@@ -28,8 +28,3 @@ export function fetchChatAPIProcess<T = any>(
   })
 }
 
-export function fetchChatConfig<T = any>() {
-  return post<T>({
-    url: '/config',
-  })
-}

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { AppState } from './helper'
+import type { AppState, Theme } from './helper'
 import { getLocalSetting, setLocalSetting } from './helper'
 
 export const useAppStore = defineStore('app-store', {
@@ -9,5 +9,12 @@ export const useAppStore = defineStore('app-store', {
       this.siderCollapsed = collapsed
       setLocalSetting(this.$state)
     },
+    setTheme(theme: Theme) {
+      this.theme = theme
+      this.recordState()
+    },
+    recordState() {
+      setLocalSetting(this.$state)
+    }
   },
 })

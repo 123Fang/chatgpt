@@ -14,8 +14,8 @@ interface ChatContext {
 
 const timeoutMs: number = !isNaN(+process.env.TIMEOUT_MS) ? +process.env.TIMEOUT_MS : 30 * 1000
 
-if (!process.env.OPENAI_API_KEY && !process.env.OPENAI_ACCESS_TOKEN)
-  throw new Error('Missing OPENAI_API_KEY or OPENAI_ACCESS_TOKEN environment variable')
+if (!process.env.OPENAI_API_KEY)
+  throw new Error('Missing OPENAI_API_KEY')
 
 let api: ChatGPTAPI 
 
@@ -80,17 +80,7 @@ async function chatReplyProcess(
   }
 }
 
-async function chatConfig() {
-  return sendResponse({
-    type: 'Success',
-    data: {
-      apiModel,
-      reverseProxy: process.env.API_REVERSE_PROXY,
-      timeoutMs,
-    },
-  })
-}
 
 export type { ChatContext, ChatMessage }
 
-export { chatReply, chatReplyProcess, chatConfig }
+export { chatReply, chatReplyProcess }
