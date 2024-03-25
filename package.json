@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "author": "123Fang <7098067344@qq.com>",
   "scripts": {
     "service": "esno ./service/index.ts",
     "dev": "vite",
@@ -55,6 +56,5 @@
     ]
   },
   "keywords": [],
-  "author": "",
   "license": "ISC"
 }
