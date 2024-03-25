@@ -287,8 +287,8 @@ onUnmounted(() => {
       <div ref="scrollRef" class="h-full p-4 overflow-hidden overflow-y-auto" :class="[{ 'p-2': isMobile }]">
         <template v-if="!dataSources.length">
           <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
-            <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
-            <span>Aha~</span>
+            <SvgIcon icon="arcticons:openai-chatgpt" class="mr-2 text-8xl" />
+            <span class="text-6xl">hello</span>
           </div>
         </template>
         <template v-else>
@@ -321,7 +321,7 @@ onUnmounted(() => {
           placeholder="Ask me anything..."
           @keypress="handleEnter"
         />
-        <NButton type="primary" :disabled="buttonDisabled" @click="handleSubmit">
+        <NButton type="primary" :disabled="buttonDisabled" @click="handleSubmit" >
           <template #icon>
             <SvgIcon icon="ri:send-plane-fill" />
           </template>

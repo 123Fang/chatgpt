@@ -17,18 +17,6 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
-
-  {
-    path: '/404',
-    name: '404',
-    component: () => import('@/views/other/404/index.vue'),
-  },
-
-  {
-    path: '/500',
-    name: '500',
-    component: () => import('@/views/other/500/index.vue'),
-  }
 ]
 
 export const router = createRouter({
@@ -36,7 +24,6 @@ export const router = createRouter({
   routes,
   scrollBehavior: () => ({ left: 0, top: 0 }),
 })
-
 
 export async function setupRouter(app: App) {
   app.use(router)

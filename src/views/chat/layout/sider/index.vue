@@ -49,7 +49,7 @@ watch(
     :collapsed="collapsed"
     :collapsed-width="0"
     :width="260"
-    :show-trigger="isMobile ? false : 'arrow-circle'"
+    :show-trigger="isMobile ? false : 'bar'"
     collapse-mode="transform"
     position="absolute"
     bordered
@@ -57,17 +57,17 @@ watch(
     @update-collapsed="handleUpdateCollapsed"
   >
     <div class="flex flex-col h-full">
+      <Footer />
       <main class="flex flex-col flex-1 min-h-0">
         <div class="p-4">
-          <NButton dashed block @click="handleAdd">
-            New chat
+          <NButton dashed block color="#8a2be2" @click="handleAdd">
+            新 建 对 话
           </NButton>
         </div>
         <div class="flex-1 min-h-0 pb-4 overflow-hidden">
           <List />
         </div>
       </main>
-      <Footer />
     </div>
   </NLayoutSider>
   <template v-if="isMobile">

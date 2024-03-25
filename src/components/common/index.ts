@@ -1,5 +1,6 @@
+import HoverButton from './HoverButton/index.vue'
 import NaiveProvider from './NaiveProvider/index.vue'
 import SvgIcon from './SvgIcon/index.vue'
-import HoverButton from './HoverButton/index.vue'
+import UserAvatar from './UserAvatar/index.vue'
 
-export { NaiveProvider,HoverButton, SvgIcon }
+export { HoverButton, NaiveProvider, SvgIcon, UserAvatar }

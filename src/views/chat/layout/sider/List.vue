@@ -66,10 +66,9 @@ function isActive(uuid: number) {
               <NInput
                 v-if="item.isEdit"
                 v-model:value="item.title"
-                size="tiny"
                 @keypress="handleEnter(item, false, $event)"
               />
-              <span v-else>{{ item.title }}</span>
+              <span >{{ item.title }}</span>
             </div>
             <div v-if="isActive(item.uuid)" class="absolute z-10 flex visible right-1">
               <template v-if="item.isEdit">

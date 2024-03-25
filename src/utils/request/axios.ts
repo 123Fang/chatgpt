@@ -7,6 +7,7 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
+    // 后期可在这里做 token 的统一处理
     return config
   },
   (error) => {
