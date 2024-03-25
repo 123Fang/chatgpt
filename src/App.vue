@@ -2,15 +2,10 @@
 import { NConfigProvider } from 'naive-ui'
 import { NaiveProvider } from '@/components/common'
 import { useTheme } from '@/hooks/useTheme'
-import { useAppStore } from '@/store'
 
 
 const { theme, themeOverrides } = useTheme()
-const appStore = useAppStore()
 
-setTimeout(() => {
-  appStore.setTheme('dark')
-},5000)
 </script>
 
 <template>

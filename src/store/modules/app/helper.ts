@@ -16,7 +16,7 @@ export interface AppState {
 }
 
 export function defaultSetting(): AppState {
-  return { siderCollapsed: false, theme: 'light' }
+  return { siderCollapsed: false, theme: 'dark' }
 }
 
 export function getLocalSetting(): AppState {
