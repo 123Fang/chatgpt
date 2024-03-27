@@ -24,7 +24,6 @@ function http<T = any>(
   const successHandler = (res: AxiosResponse<Response<T>>) => {
     if (res.data.status === 'Success' || typeof res.data === 'string')
       return res.data
-
     return Promise.reject(res.data)
   }
 

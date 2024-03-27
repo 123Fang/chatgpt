@@ -12,7 +12,6 @@ export function sendResponse(options: SendResponseOptions) {
       status: options.type,
     })
   }
-
   // eslint-disable-next-line prefer-promise-reject-errors
   return Promise.reject({
     message: options.message ?? 'Failed',
