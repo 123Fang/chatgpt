@@ -1,10 +1,10 @@
 # chatgpt webApp
 
 > 基于 vue3 和  express 的 chatgpt webApp
-<img src='https://raw.githubusercontent.com/123Fang/chatgpt/main/%E6%88%AA%E5%B1%8F2024-03-25%2017.13.55.png' />
+<img src='http://120.78.136.2/cdn/chatgpt-2' />
 <br/>
 
-<img src='https://raw.githubusercontent.com/123Fang/chatgpt/main/%E6%88%AA%E5%B1%8F2024-03-25%2017.21.32.png' />
+<img src='http://120.78.136.2/cdn/chatgpt-1' />
 <br/>
 
 
