@@ -1,6 +1,7 @@
 # chatgpt webApp
 
 > 基于 vue3 和  express 的 chatgpt webApp
+
 <img src='http://120.78.136.2/cdn/chatgpt-2.png' />
 <br/>
 
@@ -14,6 +15,7 @@
 
 
 ##  前端代码 （根目录下运行）
+
 - pnpm i 
 - npm run dev
 
@@ -21,5 +23,6 @@
 
 
 ## 后端代码 （到service目录下运行）
+
 - pnpm i
 - npm run dev
